@@ -1,2 +1,2 @@
 # trash_game
-my first game with pygame
+my first game with pygame.
