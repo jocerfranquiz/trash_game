@@ -8,9 +8,16 @@ WHITE = (255, 255, 255)
 pg.display.set_caption("Trash Game")
 
 
+def draw_window():
+    WIN.fill(WHITE)
+    # pg.display.update()
+
+
 def main():
+    clock = pg.time.Clock()
     run = True
     while run:
+        clock.tick(FPS)
         pg.display.update()
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -19,7 +26,7 @@ def main():
                 if event.key == pg.K_ESCAPE:
                     run = False
 
-        WIN.fill(WHITE)
+        draw_window()
 
     pg.quit()
 
