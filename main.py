@@ -1,6 +1,8 @@
 import pygame as pg
 import os
 
+pg.font.init()
+
 WIDTH, HEIGHT = 800, 600
 FPS = 60
 VELOCITY = 5
@@ -13,6 +15,9 @@ SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 50, 40
 BORDER = pg.Rect(WIDTH // 2 - 5, 0, 10, HEIGHT)  # Rect(left, top, width, height)
 BULLET_VELOCITY = 7
 MAX_BULLETS = 5
+MAX_HEALTH = 3
+
+HEALTH_FONT = pg.font.SysFont('comicsans', 40)
 
 YELLOW_HIT = pg.USEREVENT + 1
 RED_HIT = pg.USEREVENT + 2
@@ -30,9 +35,16 @@ SPACE = pg.transform.scale(pg.image.load(os.path.join('Assets', 'space.png')), (
 pg.display.set_caption('Trash Game')
 
 
-def draw_window(red, yellow, yellow_bullets=None, red_bullets=None):
+def draw_window(red, yellow, yellow_bullets, red_bullets, yellow_health, red_health):
     WIN.blit(SPACE, (0, 0))
     pg.draw.rect(WIN, BLACK, BORDER)
+
+    yellow_health_text = HEALTH_FONT.render(f'Health: {yellow_health}', True, YELLOW)
+    red_health_text = HEALTH_FONT.render(f'Health: {red_health}', True, RED)
+
+    WIN.blit(yellow_health_text, (10, 10))
+    WIN.blit(red_health_text, (WIDTH - red_health_text.get_width() - 10, 10))
+
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
 
@@ -82,12 +94,26 @@ def handle_bullets(yellow_bullets, red_bullets, yellow, red):
             red_bullets.remove(bullet)
 
 
+def draw_winner(winner_text):
+    font = pg.font.Font(None, 64)
+    text = font.render(winner_text, True, WHITE)
+    text_rect = text.get_rect()
+    text_rect.center = (WIDTH // 2, HEIGHT // 2)
+    WIN.blit(text, text_rect)
+    pg.display.update()
+    pg.time.delay(3000)
+
+
 def main():
     yellow = pg.Rect(WIDTH / 4, HEIGHT / 2, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
     red = pg.Rect(WIDTH * 3 / 4, HEIGHT / 2, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
 
     yellow_bullets = []
     red_bullets = []
+    winner_text = ''
+
+    yellow_health = MAX_HEALTH
+    red_health = MAX_HEALTH
 
     clock = pg.time.Clock()
     run = True
@@ -107,13 +133,29 @@ def main():
                     bullet = pg.Rect(red.x + red.width // 2, red.y + red.height // 2, 10, 5)
                     red_bullets.append(bullet)
 
+            if event.type == YELLOW_HIT:
+                yellow_health -= 1
+                if yellow_health < 1:
+                    winner_text = 'Red wins!'
+                    draw_window(red, yellow, yellow_bullets, red_bullets, yellow_health, red_health)
+
+            if event.type == RED_HIT:
+                red_health -= 1
+                if red_health < 1:
+                    winner_text = 'Yellow wins!'
+                    draw_window(red, yellow, yellow_bullets, red_bullets, yellow_health, red_health)
+
+        if winner_text:
+            draw_winner(winner_text)
+            run = False
+
         keys_pressed = pg.key.get_pressed()
         yellow_move(keys_pressed, yellow)
         red_move(keys_pressed, red)
 
         handle_bullets(yellow_bullets, red_bullets, yellow, red)
 
-        draw_window(red, yellow, yellow_bullets, red_bullets)
+        draw_window(red, yellow, yellow_bullets, red_bullets, yellow_health, red_health)
 
     pg.quit()
 
