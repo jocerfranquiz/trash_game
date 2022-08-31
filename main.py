@@ -6,8 +6,9 @@ FPS = 60
 VELOCITY = 5
 WIN = pg.display.set_mode((WIDTH, HEIGHT))
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 50, 40
-BORDER = pg.Rect(WIDTH / 2, 0, 10, HEIGHT)
+BORDER = pg.Rect(WIDTH / 2 - 5, 0, 10, HEIGHT)  # Rect(left, top, width, height)
 
 YELLOW_SPACESHIP_IMAGE = pg.image.load(os.path.join('Assets', 'spaceship_yellow.png'))
 YELLOW_SPACESHIP = pg.transform.rotate(
@@ -22,30 +23,31 @@ pg.display.set_caption('Trash Game')
 
 def draw_window(red, yellow):
     WIN.fill(WHITE)
+    pg.draw.rect(WIN, BLACK, BORDER)
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
     # pg.display.update()
 
 
 def yellow_move(keys_pressed, yellow):
-    if keys_pressed[pg.K_a] and yellow.x > 0:
+    if keys_pressed[pg.K_a] and yellow.x - VELOCITY > 0:
         yellow.x -= VELOCITY
-    if keys_pressed[pg.K_d] and yellow.x < WIDTH - SPACESHIP_WIDTH:
+    if keys_pressed[pg.K_d] and yellow.x + VELOCITY + yellow.width < BORDER.x:
         yellow.x += VELOCITY
-    if keys_pressed[pg.K_w] and yellow.y > 0:
+    if keys_pressed[pg.K_w] and yellow.y - VELOCITY > 0:
         yellow.y -= VELOCITY
-    if keys_pressed[pg.K_s] and yellow.y < HEIGHT - SPACESHIP_HEIGHT:
+    if keys_pressed[pg.K_s] and yellow.y + VELOCITY + yellow.height < HEIGHT - 10:
         yellow.y += VELOCITY
 
 
 def red_move(keys_pressed, red):
-    if keys_pressed[pg.K_LEFT] and red.x > 0:
+    if keys_pressed[pg.K_LEFT] and red.x - VELOCITY > BORDER.x:
         red.x -= VELOCITY
-    if keys_pressed[pg.K_RIGHT] and red.x < WIDTH - SPACESHIP_WIDTH:
+    if keys_pressed[pg.K_RIGHT] and red.x + VELOCITY + red.width < WIDTH:
         red.x += VELOCITY
-    if keys_pressed[pg.K_UP] and red.y > 0:
+    if keys_pressed[pg.K_UP] and red.y - VELOCITY > 0:
         red.y -= VELOCITY
-    if keys_pressed[pg.K_DOWN] and red.y < HEIGHT - SPACESHIP_HEIGHT:
+    if keys_pressed[pg.K_DOWN] and red.y + VELOCITY + red.height < HEIGHT - 10:
         red.y += VELOCITY
 
 
