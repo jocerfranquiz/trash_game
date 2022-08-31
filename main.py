@@ -2,6 +2,7 @@ import pygame as pg
 import os
 
 pg.font.init()
+pg.mixer.init()
 
 WIDTH, HEIGHT = 800, 600
 FPS = 60
@@ -15,7 +16,10 @@ SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 50, 40
 BORDER = pg.Rect(WIDTH // 2 - 5, 0, 10, HEIGHT)  # Rect(left, top, width, height)
 BULLET_VELOCITY = 7
 MAX_BULLETS = 5
-MAX_HEALTH = 3
+BULLET_HIT_SOUND = pg.mixer.Sound(os.path.join('Assets', 'bullet_hit.mp3'))
+BULLET_FIRE_SOUND = pg.mixer.Sound(os.path.join('Assets', 'bullet_fire.mp3'))
+
+MAX_HEALTH = 10
 
 HEALTH_FONT = pg.font.SysFont('comicsans', 40)
 
@@ -129,18 +133,22 @@ def main():
                 if event.key == pg.K_LCTRL and len(yellow_bullets) < MAX_BULLETS:
                     bullet = pg.Rect(yellow.x + yellow.width // 2, yellow.y + yellow.height // 2, 10, 5)
                     yellow_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
                 if event.key == pg.K_RCTRL and len(red_bullets) < MAX_BULLETS:
                     bullet = pg.Rect(red.x + red.width // 2, red.y + red.height // 2, 10, 5)
                     red_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
 
             if event.type == YELLOW_HIT:
                 yellow_health -= 1
+                BULLET_HIT_SOUND.play()
                 if yellow_health < 1:
                     winner_text = 'Red wins!'
                     draw_window(red, yellow, yellow_bullets, red_bullets, yellow_health, red_health)
 
             if event.type == RED_HIT:
                 red_health -= 1
+                BULLET_HIT_SOUND.play()
                 if red_health < 1:
                     winner_text = 'Yellow wins!'
                     draw_window(red, yellow, yellow_bullets, red_bullets, yellow_health, red_health)
