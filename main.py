@@ -16,8 +16,8 @@ SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 50, 40
 BORDER = pg.Rect(WIDTH // 2 - 5, 0, 10, HEIGHT)  # Rect(left, top, width, height)
 BULLET_VELOCITY = 7
 MAX_BULLETS = 5
-BULLET_HIT_SOUND = pg.mixer.Sound(os.path.join('Assets', 'bullet_hit.mp3'))
-BULLET_FIRE_SOUND = pg.mixer.Sound(os.path.join('Assets', 'bullet_fire.mp3'))
+BULLET_HIT_SOUND = pg.mixer.Sound(os.path.join('assets', 'bullet_hit.mp3'))
+BULLET_FIRE_SOUND = pg.mixer.Sound(os.path.join('assets', 'bullet_fire.mp3'))
 
 MAX_HEALTH = 10
 
@@ -26,15 +26,15 @@ HEALTH_FONT = pg.font.SysFont('comicsans', 40)
 YELLOW_HIT = pg.USEREVENT + 1
 RED_HIT = pg.USEREVENT + 2
 
-YELLOW_SPACESHIP_IMAGE = pg.image.load(os.path.join('Assets', 'spaceship_yellow.png'))
+YELLOW_SPACESHIP_IMAGE = pg.image.load(os.path.join('assets', 'spaceship_yellow.png'))
 YELLOW_SPACESHIP = pg.transform.rotate(
     pg.transform.scale(YELLOW_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)), 90)
 
-RED_SPACESHIP_IMAGE = pg.image.load(os.path.join('Assets', 'spaceship_red.png'))
+RED_SPACESHIP_IMAGE = pg.image.load(os.path.join('assets', 'spaceship_red.png'))
 RED_SPACESHIP = pg.transform.rotate(
     pg.transform.scale(RED_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)), -90)
 
-SPACE = pg.transform.scale(pg.image.load(os.path.join('Assets', 'space.png')), (WIDTH, HEIGHT))
+SPACE = pg.transform.scale(pg.image.load(os.path.join('assets', 'space.png')), (WIDTH, HEIGHT))
 
 pg.display.set_caption('Trash Game')
 
